@@ -1,6 +1,6 @@
 
 # page-capture-service
-The Page Capture Service is a very light weight, single file service built using [expressjs](https://expressjs.com/) which captures web pages and writes them to disk.
+The Page Capture Service is a very light weight, single file service built using [expressjs](https://expressjs.com/) which exposes an API to capture web pages streamed by the Chrome plugin `page-capture-chrome-extension` and writes them to disk.
 
 ## Getting started
 You can pull all required dependencies down by running:
