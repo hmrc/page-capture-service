@@ -16,5 +16,8 @@ To run the server, execute:
 
 ...from the project root directory.
 
+The service is currently configured to start on port 6001 as we allow access to localhost 6001-6010 from our build slave side car containers.
+
+
 ## License
 This code is open source software licensed under the [Apache 2.0 License]("http://www.apache.org/licenses/LICENSE-2.0.html").
