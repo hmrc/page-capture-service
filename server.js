@@ -49,7 +49,10 @@ app.get('/urls', (req, res) => {
 })
 
 app.get('/excluded-urls', (req, res) => {
-  res.status(200).send(excludedUrls)
+  var returnUrls = excludedUrls.filter( function (element) {
+    return !capturedUrls.includes(element)
+  })
+  res.status(200).send(returnUrls)
 })
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
