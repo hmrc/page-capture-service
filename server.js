@@ -24,6 +24,7 @@ app.post('/page-data', (req, res) => {
   //   - the page is not test only
   if(!capturedUrls.includes(body.pageURL) && !stubRegEx.test(body.pageURL) && !testOnlyRegEx.test(body.pageURL)) {
     capturedUrls.push(body.pageURL)
+    fs.appendFile("urls.log", body.pageURL + '\n', handleErrors)
     const fileList = Object.assign({}, body.files, {'index.html': '<!DOCTYPE html>\n' + body.pageHTML}, {'data': body.pageURL})
     fs.mkdirSync(rootDir, { recursive: true })
     Object.keys(fileList).forEach(fileName => {
@@ -33,7 +34,10 @@ app.post('/page-data', (req, res) => {
       })
     })
   } else {
-    excludedUrls.push(body.pageURL)
+    if(!capturedUrls.includes(body.pageURL)) {
+      fs.appendFile("excluded-urls.log", body.pageURL + '\n', handleErrors)
+      excludedUrls.push(body.pageURL)
+    }
   }
   console.log(logData)
 
@@ -49,3 +53,8 @@ app.get('/excluded-urls', (req, res) => {
 })
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+
+function handleErrors(err) {
+  if (err) throw err;
+  console.log('Saved URL');
+}
