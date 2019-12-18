@@ -1,9 +1,8 @@
 const fs = require('fs')
 const path = require('path')
-
 const express = require('express')
+const config = require('./config');
 const app = express()
-const port = 6001
 
 app.use(express.json({limit: '500mb',}));
 var capturedUrls = [];
@@ -14,15 +13,17 @@ var stubRegEx = RegExp('http:\/\/localhost:[0-9]{4}\/([a-z/-]+\-stub)');
 app.post('/page-data', (req, res) => {
   const body = req.body;
   const logData = Object.assign({}, body)
-  const rootDir = path.join(__dirname,  'output', '' + body.timestamp)
+  const rootDir = path.join(config.pagesParentPath,  'pages', '' + body.timestamp)
   logData.pageHTML = logData.pageHTML.substr(0, 100) + '...'
   logData.files = Object.keys(logData.files)
 
   //Capture the page for assessment if:
-  //   - it hasn't already been captured
-  //   - the page is not served from a stub
-  //   - the page is not test only
-  if(!capturedUrls.includes(body.pageURL) && !stubRegEx.test(body.pageURL) && !testOnlyRegEx.test(body.pageURL)) {
+  //   - it hasn't already been captured and onePagePerPath is true
+  //   - the page urls does not contain the text 'stub'
+  //   - the page is not test-only
+  if((config.captureAllPages || !capturedUrls.includes(body.pageURL)) &&
+      !stubRegEx.test(body.pageURL) &&
+      !testOnlyRegEx.test(body.pageURL)) {
     capturedUrls.push(body.pageURL)
     fs.appendFile("urls.log", body.pageURL + '\n', handleErrors)
     const fileList = Object.assign({}, body.files, {'index.html': '<!DOCTYPE html>\n' + body.pageHTML}, {'data': body.pageURL})
@@ -40,7 +41,6 @@ app.post('/page-data', (req, res) => {
     }
   }
   console.log(logData)
-
   res.status('201').send('Done')
 })
 
@@ -55,7 +55,7 @@ app.get('/excluded-urls', (req, res) => {
   res.status(200).send(returnUrls)
 })
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+app.listen(config.port, () => console.log(`Example app listening on port ${config.port}!`))
 
 function handleErrors(err) {
   if (err) throw err;
