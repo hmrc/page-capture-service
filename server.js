@@ -21,7 +21,7 @@ app.post('/page-data', (req, res) => {
   //   - it hasn't already been captured and onePagePerPath is true
   //   - the page urls does not contain the text 'stub'
   //   - the page is not test-only
-  if((config.captureAllPages || !capturedUrls.includes(body.pageURL)) &&
+  if((config.captureAllPages === 'true' || !capturedUrls.includes(body.pageURL)) &&
       !stubRegEx.test(body.pageURL) &&
       !testOnlyRegEx.test(body.pageURL)) {
     capturedUrls.push(body.pageURL)
@@ -35,7 +35,7 @@ app.post('/page-data', (req, res) => {
       })
     })
   } else {
-    if(!capturedUrls.includes(body.pageURL)) {
+    if(!capturedUrls.includes(body.pageURL) && !excludedUrls.includes(body.pageURL) ) {
       fs.appendFile("excluded-urls.log", body.pageURL + '\n', handleErrors)
       excludedUrls.push(body.pageURL)
     }
@@ -55,7 +55,8 @@ app.get('/excluded-urls', (req, res) => {
   res.status(200).send(returnUrls)
 })
 
-app.listen(config.port, () => console.log(`Example app listening on port ${config.port}!`))
+app.listen(config.port, () => console.log(`Page Capture Service App listening on port ${config.port}!`))
+console.log('Capturing All Pages?: ' + config.captureAllPages)
 
 function handleErrors(err) {
   if (err) throw err;
