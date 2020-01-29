@@ -22,7 +22,7 @@ The service is currently configured to start on port 6001 as we allow access to 
 When running the service locally you can update [config.js](config.js), or set the following environment variables:
 - **port**: defaults the environment variable named **APP_PORT** if set.  Otherwise, it's set to 6001
 - **captureAllPages**: defaults to the environment variable named **CAPTURE_ALL_PAGES** if set.  Otherwise, it's set to **false**.  When set to false the service will capture a single version of each page by path.  Setting this to **true** will capture every page uploaded to the service.
-- **pagesParentPath**: defaults to the value of the **WORKSPACE** environment variable (for use in Jenkins).  If not set, pages are saved to a sub-directory of the current working directory 
+- **pagesParentPath**: defaults to the value of the **WORKSPACE** environment variable for use on the Jenkins slave.  If the WORKSPACE environment variable is not set this value is set to the current working directory. 
 
 ## License
 This code is open source software licensed under the [Apache 2.0 License]("http://www.apache.org/licenses/LICENSE-2.0.html").
