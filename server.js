@@ -9,6 +9,7 @@ var capturedUrls = [];
 var excludedUrls = [];
 var testOnlyRegEx = RegExp('test\-only');
 var stubRegEx = RegExp('http:\/\/localhost:[0-9]{4}\/([a-z/-]+\-stub)');
+var htmlContentRegEx = RegExp('<\\s*html[^>]*>([\\s\\S]*?)<\\s*\/\\s*html>');
 
 app.post('/page-data', (req, res) => {
   const body = req.body;
@@ -21,9 +22,11 @@ app.post('/page-data', (req, res) => {
   //   - it hasn't already been captured and onePagePerPath is true
   //   - the page urls does not contain the text 'stub'
   //   - the page is not test-only
-  if((config.captureAllPages === 'true' || !capturedUrls.includes(body.pageURL)) &&
-      !stubRegEx.test(body.pageURL) &&
-      !testOnlyRegEx.test(body.pageURL)) {
+  //   - the page contains valid HTML tags
+  if((config.captureAllPages === 'true' || !capturedUrls.includes(body.pageURL))
+      && !stubRegEx.test(body.pageURL)
+      && !testOnlyRegEx.test(body.pageURL)
+      && htmlContentRegEx.test(body.pageHTML)){
     capturedUrls.push(body.pageURL)
     fs.appendFile("urls.log", body.pageURL + '\n', handleErrors)
     const fileList = Object.assign({}, body.files, {'index.html': '<!DOCTYPE html>\n' + body.pageHTML}, {'data': body.pageURL})
