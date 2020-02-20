@@ -20,7 +20,7 @@ app.post('/page-data', (req, res) => {
   const errors = Object.assign({}, {errors:logData.errors})
 
   if (logData.errors.length !== 0) {
-      console.log(body.pageURL + ' not saved. Received errors while capturing the page')
+      console.log(body.pageURL + ' not saved. Errors reported by page-capture-chrome-extension')
       console.log(errors)
       fs.appendFile("errored-urls.log", body.pageURL + '\n', handleErrors)
   }
