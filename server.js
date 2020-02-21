@@ -22,7 +22,7 @@ app.post('/page-data', (req, res) => {
   if (logData.errors.length !== 0) {
       console.log(body.pageURL + ' not saved. Error reported by page-capture-chrome-extension.')
       console.log(errors)
-      fs.appendFile("errored-urls.log", body.pageURL + '\n', handleErrors)
+      fs.appendFile("error-urls.log", body.pageURL + '\n', handleErrors)
   }
   //Capture the page for assessment if:
   //   - it hasn't already been captured and onePagePerPath is true
