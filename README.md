@@ -1,3 +1,5 @@
+**The functionality provided by this service has been moved to [accessibility-assessment](https://github.com/hmrc/accessibility-assessment/blob/master/app/routes/capturePage.js)**
+
 
 # page-capture-service
 The Page Capture Service is a lite weight, single file service built using [expressjs](https://expressjs.com/). The service exposes a single API to capture HTML pages (along with associated css/javascript assets) uploaded via HMRC's [page-capture-chrome-extension](https://github.com/hmrc/remote-webdriver-proxy-scripts/tree/master/page-capture-chrome-extension).  These pages are then written to a configurable location on the file system.
